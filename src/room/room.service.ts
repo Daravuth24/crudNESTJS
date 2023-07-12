@@ -30,7 +30,8 @@ export class RoomService {
 
   async getAllRooms(): Promise<any[]> {
     const keys = await this.redisService.getKeys(`${this.prefix}:*`);
-    const roomDataList = await Promise.all(keys.map((key) => this.redisService.get(key)));
+    const filteredKeys = keys.filter((key) => !key.includes('room:id'));
+    const roomDataList = await Promise.all(filteredKeys.map((key) => this.redisService.get(key)));
     return roomDataList.map((roomData) => JSON.parse(roomData));
   }
 }
