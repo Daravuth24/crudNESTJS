@@ -25,4 +25,8 @@ export class RedisService {
   getKeys(pattern: string): Promise<string[]> {
     return this.client.keys(pattern);
   }
+
+  incr(key: string): Promise<number> {
+    return this.client.incr(key);
+  }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { RedisService } from '../redis.service';
-import { Room } from './entities/room.entity';
+import { CreateRoomDto } from './dto/create-room.dto';
+
 
 @Injectable()
 export class RoomService {
@@ -9,7 +10,9 @@ export class RoomService {
   constructor(private readonly redisService: RedisService) {}
 
   async createRoom(room: any): Promise<void> {
-    await this.redisService.set(`${this.prefix}:${room.id}`, JSON.stringify(room));
+    const id = await this.redisService.incr('room:id'); 
+    room.id = id;
+    await this.redisService.set(`${this.prefix}:${id}`, JSON.stringify(room));  
   }
 
   async updateRoom(roomId: string, room: any): Promise<void> {
@@ -20,7 +23,7 @@ export class RoomService {
     await this.redisService.delete(`${this.prefix}:${roomId}`);
   }
 
-  async getRoom(roomId: string): Promise<any | null> {
+  async getRoom(roomId: string): Promise<CreateRoomDto | null> {
     const roomData = await this.redisService.get(`${this.prefix}:${roomId}`);
     return roomData ? JSON.parse(roomData) : null;
   }
