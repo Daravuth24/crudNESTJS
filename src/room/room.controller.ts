@@ -14,8 +14,8 @@ export class RoomController {
   }
 
   @Post()
-  async createRoom(@Body() body: CreateRoomDto): Promise<void> {
-    await this.roomService.createRoom(body);
+  async createRoom(@Body() body: CreateRoomDto): Promise<CreateRoomDto> {
+    return this.roomService.createRoom(body);
   }
 
   @Put(':id')
