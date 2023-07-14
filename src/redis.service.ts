@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import Redis, { Redis as RedisClient } from 'ioredis';
+import { redisConfig } from './redis.config';
 
 @Injectable()
 export class RedisService {
@@ -7,7 +8,7 @@ export class RedisService {
 
   constructor() {
     // Initialize Redis client
-    this.client = new Redis() as RedisClient;
+    this.client = new Redis(redisConfig) as RedisClient;
   }
 
   get(key: string): Promise<string | null> {
